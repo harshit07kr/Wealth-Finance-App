@@ -7,7 +7,7 @@ import { AccountChart } from "../_components/account-chart";
 
 export default async function AccountPage({ params }) {
   // Validate and extract the account ID
-  const accountId = params?.id;
+  const accountId = await params?.id;
   if (!accountId) notFound();
 
   const accountData = await getAccountWithTransactions(accountId);
