@@ -4,6 +4,7 @@ import { BarLoader } from "react-spinners";
 import { TransactionTable } from "../_components/transaction-table";
 import { notFound } from "next/navigation";
 import { AccountChart } from "../_components/account-chart";
+import { DeleteAccountButton } from "../_components/delete-account-button"; // <-- 1. IMPORT THIS
 
 export default async function AccountPage({ params }) {
   // Validate and extract the account ID
@@ -24,27 +25,41 @@ export default async function AccountPage({ params }) {
             {account.name}
           </h1>
           <p className="text-muted-foreground">
-            {account.type.charAt(0).toUpperCase() + account.type.slice(1).toLowerCase()} Account
+            {account.type.charAt(0).toUpperCase() +
+              account.type.slice(1).toLowerCase()}{" "}
+            Account
           </p>
         </div>
 
-        <div className="text-right">
-          <div className="text-xl sm:text-2xl font-bold">
-            ${parseFloat(account.balance || 0).toFixed(2)}
+        <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+          {/* 2. ADD THE BUTTON HERE */}
+          <DeleteAccountButton
+            accountId={account.id}
+            accountName={account.name}
+          />
+
+          <div className="text-right">
+            <div className="text-xl sm:text-2xl font-bold">
+              ${parseFloat(account.balance || 0).toFixed(2)}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {account._count?.transactions || 0} Transactions
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {account._count?.transactions || 0} Transactions
-          </p>
         </div>
       </div>
 
       {/* Chart Section */}
-      <Suspense fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}>
+      <Suspense
+        fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
+      >
         <AccountChart transactions={transactions} />
       </Suspense>
 
       {/* Transactions Table */}
-      <Suspense fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}>
+      <Suspense
+        fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
+      >
         <TransactionTable transactions={transactions} />
       </Suspense>
     </div>
